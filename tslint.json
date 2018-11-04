@@ -1,6 +1,6 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended", "tslint-immutable"],
+  "extends": ["tslint:recommended"],
   "jsRules": {},
   "rules": {
     "align": [true, "elements"],
@@ -68,7 +68,7 @@
     "no-namespace": [true, "allow-declarations"],
     "number-literal-format": true,
     "object-literal-key-quotes": [true, "as-needed"],
-    "object-literal-sort-keys": false,
+    "object-literal-sort-keys": true,
     "one-variable-per-declaration": true,
     "ordered-imports": true,
     "prefer-template": true,
