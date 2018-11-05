@@ -1,11 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import Notes from "./src/Navigator";
+import AppContainer from "./src/AppContainer";
 
 export default class App extends React.Component {
-  render() {
-    return (
-      <Notes />
-    );
+  render(): JSX.Element {
+    return <AppContainer />;
   }
 }
