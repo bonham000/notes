@@ -3,7 +3,8 @@
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
   "scripts": {
-    "start": "expo start"
+    "start": "expo start",
+    "tsc": "tsc"
   },
   "dependencies": {
     "expo": "^31.0.2",
