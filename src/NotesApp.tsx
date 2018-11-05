@@ -7,7 +7,7 @@ interface IState {
   notes: ReadonlyArray<Note>;
 }
 
-export default class App extends React.Component<{}, IState> {
+export default class NotesApp extends React.Component<{}, IState> {
   constructor(props: {}) {
     super(props);
 

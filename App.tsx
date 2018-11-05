@@ -1,9 +1,24 @@
 import React from "react";
+import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 
-import AppContainer from "./src/AppContainer";
+import NotesApp from "./src/NotesApp";
+
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "#3498db",
+    accent: "#f1c40f",
+  },
+};
 
 export default class App extends React.Component {
   render(): JSX.Element {
-    return <AppContainer />;
+    return (
+      <PaperProvider theme={theme}>
+        <NotesApp />
+      </PaperProvider>
+    );
   }
 }
