@@ -1,10 +1,12 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
+import { NavigationScreenProp } from "react-navigation";
 import AppContext, { AppContextShape } from "./Context";
 
 interface IProps {
   handleAddNote: AppContextShape["handleAddNote"];
+  navigation: NavigationScreenProp<{}>;
 }
 
 interface IState {
@@ -23,7 +25,14 @@ class CreateNote extends React.Component<IProps, IState> {
   }
   render(): JSX.Element {
     return (
-      <View style={styles.container}>
+      <View
+        style={{
+          flex: 1,
+          paddingTop: 25,
+          alignItems: "center",
+          backgroundColor: "#fff",
+        }}
+      >
         <TextInput
           mode="outlined"
           style={{
@@ -65,23 +74,15 @@ class CreateNote extends React.Component<IProps, IState> {
       content: this.state.content,
       dateCreated: new Date(),
     });
+    this.props.navigation.goBack();
   };
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 25,
-    alignItems: "center",
-    backgroundColor: "#fff",
-  },
-});
 
 export default (props: any) => {
   return (
     <AppContext.Consumer>
       {(value: AppContextShape) => {
-        return <CreateNote handleAddNote={value.handleAddNote} />;
+        return <CreateNote {...props} handleAddNote={value.handleAddNote} />;
       }}
     </AppContext.Consumer>
   );
