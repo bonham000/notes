@@ -1,5 +1,12 @@
 import React from "react";
-import { Dimensions, Platform, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { Button } from "react-native-paper";
 import SortableList from "react-native-sortable-list";
 import { NavigationScreenProp } from "react-navigation";
@@ -86,10 +93,28 @@ class Home extends React.Component<IProps, {}> {
           style={{
             flex: 1,
             flexDirection: "row",
-            alignItems: "flex-start",
+            justifyContent: "space-between",
           }}
         >
-          <Button onPress={this.handleAddNote}>Create a Note</Button>
+          <View
+            style={{
+              flex: 2,
+              alignItems: "flex-start",
+              paddingLeft: 12,
+            }}
+          >
+            <Button onPress={this.handleAddNote}>Create a Note</Button>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Image
+              style={{ position: "absolute", bottom: -15, right: -5 }}
+              // @ts-ignore
+              width={165}
+              height={165}
+              resizeMode="contain"
+              source={require("../assets/kitten.png")}
+            />
+          </View>
         </View>
       </View>
     );
