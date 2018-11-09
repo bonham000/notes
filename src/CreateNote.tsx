@@ -40,6 +40,9 @@ class CreateNote extends React.Component<IProps, IState> {
           style={{
             width: "95%",
             marginTop: 12,
+            height: 300,
+            maxHeight: 450,
+            paddingTop: 18,
           }}
           mode="outlined"
           multiline
@@ -47,7 +50,11 @@ class CreateNote extends React.Component<IProps, IState> {
           value={this.state.content}
           onChangeText={this.handleChangeContent}
         />
-        <Button style={{ marginTop: 25 }} onPress={this.createNote}>
+        <Button
+          mode="contained"
+          style={{ marginTop: 35 }}
+          onPress={this.createNote}
+        >
           Add Note
         </Button>
       </Container>
