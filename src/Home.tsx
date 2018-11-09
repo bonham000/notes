@@ -166,3 +166,14 @@ const KITTEN_C = () => (
     source={require("../assets/kittens/kitten-c.png")}
   />
 );
+
+const KITTEN_D = () => (
+  <Image
+    style={{ position: "absolute", bottom: -5, right: -5 }}
+    // @ts-ignore
+    width={155}
+    height={155}
+    resizeMode="contain"
+    source={require("../assets/kittens/kitten-d.png")}
+  />
+);
