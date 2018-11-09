@@ -1,5 +1,5 @@
+import glamorous from "glamorous-native";
 import React from "react";
-import { View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { NavigationScreenProp } from "react-navigation";
 import AppContext, { AppContextShape } from "./Context";
@@ -23,32 +23,26 @@ class CreateNote extends React.Component<IProps, IState> {
       content: "",
     };
   }
+
   render(): JSX.Element {
     return (
-      <View
-        style={{
-          flex: 1,
-          paddingTop: 25,
-          alignItems: "center",
-          backgroundColor: "#fff",
-        }}
-      >
+      <Container>
         <TextInput
-          mode="outlined"
           style={{
             width: "95%",
           }}
+          mode="outlined"
           label="Note Title"
           value={this.state.title}
           onChangeText={this.handleChangeTitle}
         />
         <TextInput
-          mode="outlined"
-          multiline
           style={{
             width: "95%",
             marginTop: 12,
           }}
+          mode="outlined"
+          multiline
           label="Note Content"
           value={this.state.content}
           onChangeText={this.handleChangeContent}
@@ -56,7 +50,7 @@ class CreateNote extends React.Component<IProps, IState> {
         <Button style={{ marginTop: 25 }} onPress={this.createNote}>
           Add Note
         </Button>
-      </View>
+      </Container>
     );
   }
 
@@ -77,6 +71,13 @@ class CreateNote extends React.Component<IProps, IState> {
     this.props.navigation.goBack();
   };
 }
+
+const Container = glamorous.view({
+  flex: 1,
+  paddingTop: 25,
+  alignItems: "center",
+  backgroundColor: "#fff",
+});
 
 export default (props: any) => {
   return (

@@ -1,19 +1,11 @@
+import glamorous from "glamorous-native";
 import React from "react";
-import {
-  Dimensions,
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import SortableList from "react-native-sortable-list";
 import { NavigationScreenProp } from "react-navigation";
 import AppContext, { AppContextShape, Note } from "./Context";
 import { ROUTE_NAMES } from "./Routes";
-
-const window = Dimensions.get("window");
 
 const SAMPLE_NOTES = [
   {
@@ -36,42 +28,16 @@ interface IProps {
 class Home extends React.Component<IProps, {}> {
   render(): JSX.Element {
     return (
-      <View
-        style={{
-          flex: 1,
-          paddingTop: 50,
-          alignItems: "center",
-          backgroundColor: "#fff",
-        }}
-      >
+      <Container>
         <View style={{ flex: 8 }}>
           <SortableList
             data={this.props.notes}
-            style={styles.list}
-            contentContainerStyle={styles.contentContainer}
+            style={{ flex: 1 }}
+            contentContainerStyle={styles.container}
             renderRow={({ data }: { data: Note }) => {
               return (
-                <View
-                  style={{
-                    marginTop: 2,
-                    marginBottom: 2,
-                    padding: 6,
-                    width: "100%",
-                    borderWidth: 1,
-                    borderColor: "rgb(230,230,230)",
-                  }}
-                >
-                  <View
-                    style={{
-                      paddingTop: 4,
-                      paddingBottom: 4,
-                      width: "100%",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      borderBottomWidth: 1,
-                      borderBottomColor: "rgb(245,245,245)",
-                    }}
-                  >
+                <RowContainer>
+                  <RowTop>
                     <Text
                       numberOfLines={1}
                       adjustsFontSizeToFit
@@ -80,43 +46,24 @@ class Home extends React.Component<IProps, {}> {
                       {data.title}
                     </Text>
                     <Text>{new Date(data.dateCreated).toDateString()}</Text>
-                  </View>
+                  </RowTop>
                   <View style={{ paddingTop: 8, paddingBottom: 8 }}>
                     <Text>{data.content}</Text>
                   </View>
-                </View>
+                </RowContainer>
               );
             }}
           />
         </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <View
-            style={{
-              flex: 2,
-              alignItems: "flex-start",
-              paddingLeft: 12,
-            }}
-          >
-            <Button onPress={this.handleAddNote}>Create a Note</Button>
-          </View>
-          <View style={{ flex: 1 }}>
-            <Image
-              style={{ position: "absolute", bottom: -15, right: -5 }}
-              // @ts-ignore
-              width={165}
-              height={165}
-              resizeMode="contain"
-              source={require("../assets/kitten.png")}
-            />
-          </View>
-        </View>
-      </View>
+        <ControlsContainer>
+          <ButtonContainer>
+            <Button mode="contained" onPress={this.handleAddNote}>
+              Create a Note
+            </Button>
+          </ButtonContainer>
+          <View style={{ flex: 1 }}>{getKitten()}</View>
+        </ControlsContainer>
+      </Container>
     );
   }
 
@@ -135,6 +82,45 @@ export default (props: any) => {
   );
 };
 
+const Container = glamorous.view({
+  flex: 1,
+  paddingTop: 50,
+  alignItems: "center",
+  backgroundColor: "rgb(231,237,240)",
+});
+
+const ControlsContainer = glamorous.view({
+  flex: 1,
+  flexDirection: "row",
+  justifyContent: "space-between",
+});
+
+const ButtonContainer = glamorous.view({
+  flex: 2,
+  alignItems: "flex-start",
+  paddingLeft: 40,
+  paddingBottom: 30,
+});
+
+const RowContainer = glamorous.view({
+  marginTop: 2,
+  marginBottom: 2,
+  padding: 6,
+  width: "100%",
+  borderWidth: 1,
+  borderColor: "rgb(230,230,230)",
+});
+
+const RowTop = glamorous.view({
+  paddingTop: 4,
+  paddingBottom: 4,
+  width: "100%",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  borderBottomWidth: 1,
+  borderBottomColor: "rgb(245,245,245)",
+});
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -142,59 +128,41 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#eee",
   },
-
-  title: {
-    fontSize: 20,
-    paddingVertical: 20,
-    color: "#999999",
-  },
-
-  list: {
-    flex: 1,
-  },
-
-  contentContainer: {
-    width: window.width,
-    paddingHorizontal: 12,
-  },
-
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 16,
-    height: 80,
-    flex: 1,
-    marginTop: 7,
-    marginBottom: 12,
-    borderRadius: 4,
-
-    ...Platform.select({
-      ios: {
-        width: window.width - 30 * 2,
-        shadowColor: "rgba(0,0,0,0.2)",
-        shadowOpacity: 1,
-        shadowOffset: { height: 2, width: 2 },
-        shadowRadius: 2,
-      },
-
-      android: {
-        width: window.width - 30 * 2,
-        elevation: 0,
-        marginHorizontal: 30,
-      },
-    }),
-  },
-
-  image: {
-    width: 50,
-    height: 50,
-    marginRight: 30,
-    borderRadius: 25,
-  },
-
-  text: {
-    fontSize: 24,
-    color: "#222222",
-  },
 });
+
+const getKitten = () => {
+  return <KITTEN_A />;
+};
+
+const KITTEN_A = () => (
+  <Image
+    style={{ position: "absolute", bottom: -15, right: 10 }}
+    // @ts-ignore
+    width={165}
+    height={165}
+    resizeMode="contain"
+    source={require("../assets/kittens/kitten-a.png")}
+  />
+);
+
+const KITTEN_B = () => (
+  <Image
+    style={{ position: "absolute", bottom: -15, right: -5 }}
+    // @ts-ignore
+    width={165}
+    height={165}
+    resizeMode="contain"
+    source={require("../assets/kittens/kitten-b.png")}
+  />
+);
+
+const KITTEN_C = () => (
+  <Image
+    style={{ position: "absolute", bottom: -15, right: 0 }}
+    // @ts-ignore
+    width={185}
+    height={185}
+    resizeMode="contain"
+    source={require("../assets/kittens/kitten-c.png")}
+  />
+);
