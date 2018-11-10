@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { AppState, View } from "react-native";
 import Dialog from "react-native-dialog";
 
 import AppContext, { Note } from "./Context";
@@ -11,6 +11,7 @@ interface IState {
   username: string;
   loading: boolean;
   isDialogVisible: boolean;
+  appState: string;
 }
 
 export default class NotesApp extends React.Component<{}, IState> {
@@ -22,16 +23,25 @@ export default class NotesApp extends React.Component<{}, IState> {
       username: "",
       loading: true,
       isDialogVisible: true,
+      appState: AppState.currentState,
     };
   }
 
   async componentDidMount(): Promise<void> {
     const username = await StorageModule.getUsername();
+    const notes = await StorageModule.getSavedNotes();
     this.setState({
+      notes,
       username,
       loading: false,
       isDialogVisible: !username,
     });
+
+    AppState.addEventListener("change", this.handleAppStateChange);
+  }
+
+  componentWillUnmount(): void {
+    AppState.removeEventListener("change", this.handleAppStateChange);
   }
 
   render(): JSX.Element | null {
@@ -101,5 +111,16 @@ export default class NotesApp extends React.Component<{}, IState> {
     this.setState(prevState => ({
       notes: prevState.notes.concat(note),
     }));
+  };
+
+  handleAppStateChange = (nextAppState: string) => {
+    if (
+      this.state.appState.match(/active|foreground/) &&
+      nextAppState === "inactive"
+    ) {
+      const { notes } = this.state;
+      StorageModule.persistNotes(notes);
+    }
+    this.setState({ appState: nextAppState });
   };
 }
