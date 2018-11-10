@@ -2,7 +2,7 @@ import glamorous from "glamorous-native";
 import React from "react";
 import { Button, TextInput } from "react-native-paper";
 import { NavigationScreenProp } from "react-navigation";
-import AppContext, { AppContextShape } from "./Context";
+import AppContext, { AppContextShape } from "./AppContext";
 
 interface IProps {
   handleAddNote: AppContextShape["handleAddNote"];

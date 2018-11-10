@@ -1,5 +1,5 @@
 import { AsyncStorage } from "react-native";
-import { Note } from "./Context";
+import { Note } from "./AppContext";
 
 class StorageModule {
   USERNAME_KEY = "USERNAME";

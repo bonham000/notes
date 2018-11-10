@@ -6,10 +6,10 @@ import {
   NavigationScreenProp,
 } from "react-navigation";
 
-import CreateNote from "./CreateNote";
-import DrawerComponent from "./DrawerMenu";
-import App from "./Home";
-import { ROUTE_NAMES } from "./Routes";
+import CreateNote from "./CreateNoteScreen";
+import DrawerComponent from "./DrawerMenuScreen";
+import App from "./NotesHomeScreen";
+import { ROUTE_NAMES } from "./RouteNames";
 
 const AppStack = (userName: string) => {
   return createStackNavigator(
@@ -22,7 +22,7 @@ const AppStack = (userName: string) => {
           navigation: NavigationScreenProp<{}>;
         }) => {
           return {
-            title: `${userName}’s Notes 🐱`,
+            title: `${userName}’s Notes 📚`,
             headerBackTitle: null,
             headerLeft: (
               <MaterialIcons

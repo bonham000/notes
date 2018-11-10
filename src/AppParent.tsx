@@ -2,8 +2,8 @@ import React from "react";
 import { AppState, View } from "react-native";
 import Dialog from "react-native-dialog";
 
-import AppContext, { Note } from "./Context";
-import createAppNavigator from "./Navigator";
+import AppContext, { Note } from "./AppContext";
+import createAppNavigator from "./NavigatorConfig";
 import StorageModule from "./StorageModule";
 
 interface IState {
@@ -116,7 +116,7 @@ export default class NotesApp extends React.Component<{}, IState> {
   handleAppStateChange = (nextAppState: string) => {
     if (
       this.state.appState.match(/active|foreground/) &&
-      nextAppState === "inactive"
+      nextAppState.match(/inactive|background/)
     ) {
       const { notes } = this.state;
       StorageModule.persistNotes(notes);

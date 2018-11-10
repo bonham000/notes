@@ -2,7 +2,7 @@ import glamorous from "glamorous-native";
 import React from "react";
 import { Alert, Image, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-navigation";
-import AppContext, { AppContextShape } from "./Context";
+import AppContext, { AppContextShape } from "./AppContext";
 
 export default (props: any) => (
   <AppContext.Consumer>

@@ -1,7 +1,7 @@
 import React from "react";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 
-import NotesApp from "./src/NotesApp";
+import NotesApp from "./src/AppParent";
 
 const theme = {
   ...DefaultTheme,

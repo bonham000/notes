@@ -4,8 +4,8 @@ import { Dimensions, Image, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import SortableList from "react-native-sortable-list";
 import { NavigationScreenProp } from "react-navigation";
-import AppContext, { AppContextShape, Note } from "./Context";
-import { ROUTE_NAMES } from "./Routes";
+import AppContext, { AppContextShape, Note } from "./AppContext";
+import { ROUTE_NAMES } from "./RouteNames";
 
 const { width } = Dimensions.get("window");
 
