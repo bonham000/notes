@@ -9,11 +9,21 @@ export interface Note {
 export interface AppContextShape {
   notes: ReadonlyArray<Note>;
   handleAddNote: (note: Note) => void;
+  handleResetName: () => void;
+  handleClearNotes: () => void;
 }
 
 const AppContext = React.createContext({
-  notes: [],
-  handleAddNote: () => null,
+  notes: [] as ReadonlyArray<Note>,
+  handleAddNote: (note: Note) => {
+    return;
+  },
+  handleResetName: () => {
+    return;
+  },
+  handleClearNotes: () => {
+    return;
+  },
 });
 
 export default AppContext;

@@ -35,7 +35,7 @@ export default class NotesApp extends React.Component<{}, IState> {
   }
 
   render(): JSX.Element | null {
-    const { loading, username, isDialogVisible } = this.state;
+    const { notes, loading, username, isDialogVisible } = this.state;
     if (loading) {
       return null;
     }
@@ -44,8 +44,12 @@ export default class NotesApp extends React.Component<{}, IState> {
     const shouldRenderApp = Boolean(username) && !isDialogVisible;
     return (
       <AppContext.Provider
-        // @ts-ignore
-        value={{ notes: this.state.notes, handleAddNote: this.handleAddNote }}
+        value={{
+          notes,
+          handleAddNote: this.handleAddNote,
+          handleResetName: this.handleResetName,
+          handleClearNotes: this.handleClearNotes,
+        }}
       >
         <View style={{ flex: 1, backgroundColor: "rgb(75,75,75)" }}>
           <Dialog.Container visible={isDialogVisible}>
@@ -56,13 +60,27 @@ export default class NotesApp extends React.Component<{}, IState> {
               onChangeText={this.handleChangeUsername}
               placeholder="Your name!"
             />
-            <Dialog.Button onPress={this.handleSetUsername} label="yay! ^_^" />
+            <Dialog.Button
+              onPress={this.handleSetUsername}
+              label="Proceed 🙏"
+            />
           </Dialog.Container>
           {shouldRenderApp && <AppNavigator />}
         </View>
       </AppContext.Provider>
     );
   }
+
+  handleResetName = () => {
+    this.setState({
+      username: "",
+      isDialogVisible: true,
+    });
+  };
+
+  handleClearNotes = () => {
+    this.setState({ notes: [] });
+  };
 
   handleChangeUsername = (username: string) => {
     this.setState({ username });
@@ -79,7 +97,7 @@ export default class NotesApp extends React.Component<{}, IState> {
     );
   };
 
-  handleAddNote = (note: Note) => {
+  handleAddNote = (note: Note): void => {
     this.setState(prevState => ({
       notes: prevState.notes.concat(note),
     }));

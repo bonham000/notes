@@ -1,11 +1,13 @@
 import glamorous from "glamorous-native";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Image, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import SortableList from "react-native-sortable-list";
 import { NavigationScreenProp } from "react-navigation";
 import AppContext, { AppContextShape, Note } from "./Context";
 import { ROUTE_NAMES } from "./Routes";
+
+const { width } = Dimensions.get("window");
 
 const SAMPLE_NOTES = [
   {
@@ -33,7 +35,10 @@ class Home extends React.Component<IProps, {}> {
           <SortableList
             data={this.props.notes}
             style={{ flex: 1 }}
-            contentContainerStyle={styles.container}
+            contentContainerStyle={{
+              width,
+              paddingHorizontal: 12,
+            }}
             renderRow={({ data }: { data: Note }) => {
               return (
                 <RowContainer>
@@ -109,6 +114,7 @@ const RowContainer = glamorous.view({
   width: "100%",
   borderWidth: 1,
   borderColor: "rgb(230,230,230)",
+  backgroundColor: "rgb(255,255,255)",
 });
 
 const RowTop = glamorous.view({
@@ -119,15 +125,6 @@ const RowTop = glamorous.view({
   justifyContent: "space-between",
   borderBottomWidth: 1,
   borderBottomColor: "rgb(245,245,245)",
-});
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#eee",
-  },
 });
 
 const getKitten = () => {
