@@ -66,7 +66,7 @@ class Home extends React.Component<IProps, {}> {
               Create a Note
             </Button>
           </ButtonContainer>
-          <View style={{ flex: 1 }}>{getKitten()}</View>
+          <View style={{ flex: 1 }}>{KITTENS[this.getKittenIndex()]}</View>
         </ControlsContainer>
       </Container>
     );
@@ -74,6 +74,10 @@ class Home extends React.Component<IProps, {}> {
 
   handleAddNote = () => {
     this.props.navigation.navigate(ROUTE_NAMES.CREATE_NOTE);
+  };
+
+  getKittenIndex = () => {
+    return Math.floor(Math.random() * 3);
   };
 }
 
@@ -127,11 +131,7 @@ const RowTop = glamorous.view({
   borderBottomColor: "rgb(245,245,245)",
 });
 
-const getKitten = () => {
-  return <KITTEN_A />;
-};
-
-const KITTEN_A = () => (
+const KITTENS = [
   <Image
     style={{ position: "absolute", bottom: -15, right: 10 }}
     // @ts-ignore
@@ -139,10 +139,7 @@ const KITTEN_A = () => (
     height={165}
     resizeMode="contain"
     source={require("../assets/kittens/kitten-a.png")}
-  />
-);
-
-const KITTEN_B = () => (
+  />,
   <Image
     style={{ position: "absolute", bottom: -15, right: -5 }}
     // @ts-ignore
@@ -150,10 +147,7 @@ const KITTEN_B = () => (
     height={165}
     resizeMode="contain"
     source={require("../assets/kittens/kitten-b.png")}
-  />
-);
-
-const KITTEN_C = () => (
+  />,
   <Image
     style={{ position: "absolute", bottom: -15, right: 0 }}
     // @ts-ignore
@@ -161,10 +155,7 @@ const KITTEN_C = () => (
     height={185}
     resizeMode="contain"
     source={require("../assets/kittens/kitten-c.png")}
-  />
-);
-
-const KITTEN_D = () => (
+  />,
   <Image
     style={{ position: "absolute", bottom: -5, right: -5 }}
     // @ts-ignore
@@ -172,5 +163,5 @@ const KITTEN_D = () => (
     height={155}
     resizeMode="contain"
     source={require("../assets/kittens/kitten-d.png")}
-  />
-);
+  />,
+];
