@@ -3,6 +3,7 @@ import React from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import { NavigationScreenProp } from "react-navigation";
+
 import AppContext, { AppContextShape, Note } from "./AppContext";
 import { ROUTE_NAMES } from "./RouteNames";
 
@@ -16,7 +17,7 @@ class Home extends React.Component<IProps, {}> {
   render(): JSX.Element {
     return (
       <Container>
-        <View style={{ flex: 8 }}>
+        <View style={{ flex: 8, paddingBottom: 30 }}>
           <ScrollView contentContainerStyle={{ paddingHorizontal: 8 }}>
             {this.props.notes.map(note => {
               return (
@@ -60,24 +61,34 @@ interface NoteItemProps {
 // tslint:disable-next-line
 class NoteItem extends React.Component<
   NoteItemProps,
-  { toggleOptions: boolean }
+  { toggleOptions: boolean; abbreviate: boolean }
 > {
+  CONTENT_LIMIT = 125;
+
   constructor(props: NoteItemProps) {
     super(props);
 
     this.state = {
       toggleOptions: false,
+      abbreviate: false,
     };
   }
 
   render(): JSX.Element {
     const { data } = this.props;
+    const canAbbreviate = data.content.length > this.CONTENT_LIMIT;
+    const noteContent = canAbbreviate
+      ? `${data.content.slice(0, 125)}...`
+      : data.content;
     return (
       <RowContainer onPress={this.toggleNoteOptions}>
         {this.state.toggleOptions && (
           <OptionsOverlay>
             <Option onPress={this.toggleNoteOptions}>
-              <Text>Cancel 🤭</Text>
+              <Text>Back 🏇</Text>
+            </Option>
+            <Option onPress={this.handleViewNote}>
+              <Text>View 🔭</Text>
             </Option>
             <Option onPress={this.handleEditNote}>
               <Text>Edit 📑</Text>
@@ -98,7 +109,7 @@ class NoteItem extends React.Component<
           <Text>{new Date(data.dateCreated).toDateString()}</Text>
         </RowTop>
         <View style={{ paddingTop: 8, paddingBottom: 8 }}>
-          <Text>{data.content}</Text>
+          <Text>{noteContent}</Text>
         </View>
       </RowContainer>
     );
@@ -108,6 +119,16 @@ class NoteItem extends React.Component<
     this.setState({
       toggleOptions: !this.state.toggleOptions,
     });
+  };
+
+  handleViewNote = () => {
+    const { data } = this.props;
+    this.props.navigation.navigate(ROUTE_NAMES.VIEW_NOTE, {
+      title: data.title,
+      content: data.content,
+      dateString: data.dateCreated,
+    });
+    this.toggleNoteOptions();
   };
 
   handleEditNote = () => {
@@ -143,7 +164,7 @@ export default (props: any) => {
 
 const Container = glamorous.view({
   flex: 1,
-  paddingTop: 50,
+  paddingTop: 8,
   alignItems: "center",
   backgroundColor: "rgb(231,237,240)",
 });

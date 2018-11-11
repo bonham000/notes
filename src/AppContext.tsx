@@ -3,7 +3,7 @@ import React from "react";
 export interface Note {
   title: string;
   content: string;
-  dateCreated: Date;
+  dateCreated: string;
 }
 
 export interface AppContextShape {

@@ -10,6 +10,7 @@ import CreateNote from "./CreateNoteScreen";
 import DrawerComponent from "./DrawerMenuScreen";
 import App from "./NotesHomeScreen";
 import { ROUTE_NAMES } from "./RouteNames";
+import ViewNote from "./ViewNoteScreen";
 
 const AppStack = (userName: string) => {
   return createStackNavigator(
@@ -49,6 +50,20 @@ const AppStack = (userName: string) => {
           const editingNote = !!title && !!content;
           return {
             title: `${editingNote ? "Edit" : "Create a"} Note 📝`,
+            headerBackTitle: null,
+          };
+        },
+      },
+      [ROUTE_NAMES.VIEW_NOTE]: {
+        screen: ViewNote,
+        navigationOptions: ({
+          navigation,
+        }: {
+          navigation: NavigationScreenProp<{}>;
+        }) => {
+          const title = navigation.getParam("title", "");
+          return {
+            title: `${title} 🎨`,
             headerBackTitle: null,
           };
         },

@@ -1,7 +1,8 @@
 import glamorous from "glamorous-native";
 import React from "react";
-import { Button, TextInput } from "react-native-paper";
+import { Button, Snackbar, TextInput } from "react-native-paper";
 import { NavigationScreenProp } from "react-navigation";
+
 import AppContext, { AppContextShape } from "./AppContext";
 
 interface IProps {
@@ -13,6 +14,7 @@ interface IProps {
 interface IState {
   title: string;
   content: string;
+  snackMessage: string;
   editingNote: boolean;
   editingNoteDateString: string;
 }
@@ -31,6 +33,7 @@ class CreateNote extends React.Component<IProps, IState> {
     this.state = {
       title,
       content,
+      snackMessage: "",
       editingNoteDateString,
       editingNote: !!title && !!content,
     };
@@ -39,6 +42,18 @@ class CreateNote extends React.Component<IProps, IState> {
   render(): JSX.Element {
     return (
       <Container>
+        <Snackbar
+          visible={Boolean(this.state.snackMessage)}
+          onDismiss={() => this.setState({ snackMessage: "" })}
+          action={{
+            label: "Okay",
+            onPress: () => {
+              this.setState({ snackMessage: "" });
+            },
+          }}
+        >
+          {this.state.snackMessage}
+        </Snackbar>
         <TextInput
           style={{
             width: "95%",
@@ -82,19 +97,34 @@ class CreateNote extends React.Component<IProps, IState> {
   };
 
   createNote = () => {
-    const actionHandler = this.state.editingNote
-      ? this.props.handleEditNote
-      : this.props.handleAddNote;
+    const { title, content } = this.state;
 
-    actionHandler(
-      {
-        title: this.state.title,
-        content: this.state.content,
-        dateCreated: new Date(),
-      },
-      this.state.editingNoteDateString,
-    );
-    this.props.navigation.goBack();
+    if (!title) {
+      this.setState({
+        snackMessage: "You must add a title! 🍰",
+      });
+    } else if (!content) {
+      this.setState({
+        snackMessage: "Note content is required, too! 🍉",
+      });
+    } else {
+      if (this.state.editingNote) {
+        this.props.handleEditNote(
+          {
+            title: this.state.title,
+            content: this.state.content,
+            dateCreated: String(new Date()),
+          },
+          this.state.editingNoteDateString,
+        );
+      } else {
+        this.props.handleAddNote({
+          title: this.state.title,
+          content: this.state.content,
+          dateCreated: String(new Date()),
+        });
+      }
+    }
   };
 }
 
