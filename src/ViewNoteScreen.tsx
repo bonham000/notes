@@ -39,7 +39,6 @@ class ViewNote extends React.Component<IProps, IState> {
               paddingTop: 25,
               paddingBottom: 35,
               paddingHorizontal: 10,
-              backgroundColor: "rgb(231,237,240)",
             }}
           >
             <Text style={{ fontSize: 16 }}>{this.state.content}</Text>

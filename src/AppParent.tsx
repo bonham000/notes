@@ -1,7 +1,6 @@
 import React from "react";
-import { AppState, View } from "react-native";
+import { ActivityIndicator, AppState, View } from "react-native";
 import Dialog from "react-native-dialog";
-import { Snackbar } from "react-native-paper";
 
 import AppContext, { Note } from "./AppContext";
 import createAppNavigator from "./NavigatorConfig";
@@ -12,7 +11,6 @@ interface IState {
   username: string;
   loading: boolean;
   isDialogVisible: boolean;
-  snackMessage: string;
   appState: string;
 }
 
@@ -27,7 +25,6 @@ export default class NotesApp extends React.Component<{}, IState> {
       username: "",
       loading: true,
       isDialogVisible: true,
-      snackMessage: "",
       appState: AppState.currentState,
     };
   }
@@ -52,8 +49,14 @@ export default class NotesApp extends React.Component<{}, IState> {
 
   render(): JSX.Element | null {
     const { notes, loading, username, isDialogVisible } = this.state;
-    if (loading) {
-      return null;
+    if (!loading) {
+      return (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator color="#3498db" />
+        </View>
+      );
     }
 
     const AppNavigator = createAppNavigator(username);
@@ -84,19 +87,6 @@ export default class NotesApp extends React.Component<{}, IState> {
             />
           </Dialog.Container>
           {shouldRenderApp && <AppNavigator />}
-          <Snackbar
-            visible={Boolean(this.state.snackMessage)}
-            onDismiss={() => this.setState({ snackMessage: "" })}
-            action={{
-              label: "Okay",
-              onPress: () => {
-                this.setState({ snackMessage: "" });
-                this.clearTimeout();
-              },
-            }}
-          >
-            {this.state.snackMessage}
-          </Snackbar>
         </View>
       </AppContext.Provider>
     );
@@ -118,37 +108,23 @@ export default class NotesApp extends React.Component<{}, IState> {
   };
 
   handleAddNote = (note: Note): void => {
-    this.setState(
-      currentState => ({
-        snackMessage: "Note created! 🏆",
-        notes: [note, ...currentState.notes],
-      }),
-      this.timeoutSnackbar,
-    );
+    this.setState(currentState => ({
+      notes: [note, ...currentState.notes],
+    }));
   };
 
   handleEditNote = (note: Note, previousNoteDate: string): void => {
-    this.setState(
-      currentState => ({
-        snackMessage: "Note saved! 🏅",
-        notes: [note, ...currentState.notes].filter(
-          n => String(n.dateCreated) !== previousNoteDate,
-        ),
-      }),
-      this.timeoutSnackbar,
-    );
+    this.setState(currentState => ({
+      notes: [note, ...currentState.notes].filter(
+        n => String(n.dateCreated) !== previousNoteDate,
+      ),
+    }));
   };
 
   handleDeleteNote = (noteDate: string): void => {
-    this.setState(
-      currentState => ({
-        snackMessage: "Note removed! 🤘",
-        notes: currentState.notes.filter(
-          n => String(n.dateCreated) !== noteDate,
-        ),
-      }),
-      this.timeoutSnackbar,
-    );
+    this.setState(currentState => ({
+      notes: currentState.notes.filter(n => String(n.dateCreated) !== noteDate),
+    }));
   };
 
   handleClearNotes = () => {
@@ -160,12 +136,6 @@ export default class NotesApp extends React.Component<{}, IState> {
       username: "",
       isDialogVisible: true,
     });
-  };
-
-  timeoutSnackbar = () => {
-    this.timeout = setTimeout(() => {
-      this.setState({ snackMessage: "" });
-    }, 4000);
   };
 
   handleAppStateChange = (nextAppState: string) => {
