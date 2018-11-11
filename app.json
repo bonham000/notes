@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "notes",
-    "description": "This project is really great.",
+    "name": "Notes for Kittens",
+    "description": "Take notes and see cats and emojis and stuff",
     "slug": "notes",
     "privacy": "public",
     "sdkVersion": "31.0.0",
@@ -17,9 +17,10 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.notes.app"
+    },
     "ios": {
       "supportsTablet": true
     }
