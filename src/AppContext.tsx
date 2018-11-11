@@ -9,6 +9,8 @@ export interface Note {
 export interface AppContextShape {
   notes: ReadonlyArray<Note>;
   handleAddNote: (note: Note) => void;
+  handleEditNote: (note: Note, prevDateString: string) => void;
+  handleDeleteNote: (noteDate: string) => void;
   handleResetName: () => void;
   handleClearNotes: () => void;
 }
@@ -16,6 +18,12 @@ export interface AppContextShape {
 const AppContext = React.createContext({
   notes: [] as ReadonlyArray<Note>,
   handleAddNote: (note: Note) => {
+    return;
+  },
+  handleEditNote: (note: Note, prevDateString: string) => {
+    return;
+  },
+  handleDeleteNote: (noteDate: string) => {
     return;
   },
   handleResetName: () => {

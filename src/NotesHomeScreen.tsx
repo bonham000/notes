@@ -1,30 +1,15 @@
 import glamorous from "glamorous-native";
 import React from "react";
-import { Dimensions, Image, Text, View } from "react-native";
+import { Image, ScrollView, Text, View } from "react-native";
 import { Button } from "react-native-paper";
-import SortableList from "react-native-sortable-list";
 import { NavigationScreenProp } from "react-navigation";
 import AppContext, { AppContextShape, Note } from "./AppContext";
 import { ROUTE_NAMES } from "./RouteNames";
 
-const { width } = Dimensions.get("window");
-
-const SAMPLE_NOTES = [
-  {
-    content: "Some content",
-    dateCreated: "2018-11-06T01:52:05.460Z",
-    title: "My note",
-  },
-  {
-    content: "Blah",
-    dateCreated: "2018-11-06T01:52:13.128Z",
-    title: "Another note",
-  },
-];
-
 interface IProps {
   notes: ReadonlyArray<Note>;
   navigation: NavigationScreenProp<{}>;
+  handleDeleteNote: AppContextShape["handleDeleteNote"];
 }
 
 class Home extends React.Component<IProps, {}> {
@@ -32,19 +17,18 @@ class Home extends React.Component<IProps, {}> {
     return (
       <Container>
         <View style={{ flex: 8 }}>
-          <SortableList
-            data={this.props.notes}
-            style={{ flex: 1 }}
-            contentContainerStyle={{
-              width,
-              paddingHorizontal: 12,
-            }}
-            renderRow={({ data }: { data: Note }) => {
+          <ScrollView contentContainerStyle={{ paddingHorizontal: 8 }}>
+            {this.props.notes.map(note => {
               return (
-                <NoteItem data={data} navigation={this.props.navigation} />
+                <NoteItem
+                  data={note}
+                  key={note.dateCreated.toString()}
+                  navigation={this.props.navigation}
+                  handleDeleteNote={this.props.handleDeleteNote}
+                />
               );
-            }}
-          />
+            })}
+          </ScrollView>
         </View>
         <ControlsContainer>
           <ButtonContainer>
@@ -70,6 +54,7 @@ class Home extends React.Component<IProps, {}> {
 interface NoteItemProps {
   data: Note;
   navigation: NavigationScreenProp<{}>;
+  handleDeleteNote: AppContextShape["handleDeleteNote"];
 }
 
 // tslint:disable-next-line
@@ -87,20 +72,21 @@ class NoteItem extends React.Component<
 
   render(): JSX.Element {
     const { data } = this.props;
-    return this.state.toggleOptions ? (
-      <RowContainer style={{ flexDirection: "row", height: 65 }}>
-        <Option onPress={this.toggleNoteOptions}>
-          <Text>Cancel 🤭</Text>
-        </Option>
-        <Option onPress={this.handleEditNote}>
-          <Text>Edit 📑</Text>
-        </Option>
-        <Option onPress={this.handleDeleteNote}>
-          <Text>Delete 🔥</Text>
-        </Option>
-      </RowContainer>
-    ) : (
+    return (
       <RowContainer onPress={this.toggleNoteOptions}>
+        {this.state.toggleOptions && (
+          <OptionsOverlay>
+            <Option onPress={this.toggleNoteOptions}>
+              <Text>Cancel 🤭</Text>
+            </Option>
+            <Option onPress={this.handleEditNote}>
+              <Text>Edit 📑</Text>
+            </Option>
+            <Option onPress={this.handleDeleteNote}>
+              <Text>Delete 🔥</Text>
+            </Option>
+          </OptionsOverlay>
+        )}
         <RowTop>
           <Text
             numberOfLines={1}
@@ -129,11 +115,13 @@ class NoteItem extends React.Component<
     this.props.navigation.navigate(ROUTE_NAMES.CREATE_NOTE, {
       title: data.title,
       content: data.content,
+      dateString: data.dateCreated,
     });
+    this.toggleNoteOptions();
   };
 
   handleDeleteNote = () => {
-    // delete...
+    this.props.handleDeleteNote(String(this.props.data.dateCreated));
   };
 }
 
@@ -141,7 +129,13 @@ export default (props: any) => {
   return (
     <AppContext.Consumer>
       {(value: AppContextShape) => {
-        return <Home {...props} notes={value.notes} />;
+        return (
+          <Home
+            {...props}
+            notes={value.notes}
+            handleDeleteNote={value.handleDeleteNote}
+          />
+        );
       }}
     </AppContext.Consumer>
   );
@@ -173,8 +167,20 @@ const RowContainer = glamorous.touchableOpacity({
   padding: 6,
   width: "100%",
   borderWidth: 1,
+  position: "relative",
   borderColor: "rgb(230,230,230)",
   backgroundColor: "rgb(255,255,255)",
+});
+
+const OptionsOverlay = glamorous.view({
+  zIndex: 10,
+  top: 0,
+  bottom: 0,
+  right: 0,
+  left: 0,
+  position: "absolute",
+  flexDirection: "row",
+  backgroundColor: "#FFFEDD",
 });
 
 const Option = glamorous.touchableOpacity({

@@ -50,6 +50,8 @@ export default class NotesApp extends React.Component<{}, IState> {
       return null;
     }
 
+    console.log(notes);
+
     const AppNavigator = createAppNavigator(username);
     const shouldRenderApp = Boolean(username) && !isDialogVisible;
     return (
@@ -57,6 +59,8 @@ export default class NotesApp extends React.Component<{}, IState> {
         value={{
           notes,
           handleAddNote: this.handleAddNote,
+          handleEditNote: this.handleEditNote,
+          handleDeleteNote: this.handleDeleteNote,
           handleResetName: this.handleResetName,
           handleClearNotes: this.handleClearNotes,
         }}
@@ -108,8 +112,23 @@ export default class NotesApp extends React.Component<{}, IState> {
   };
 
   handleAddNote = (note: Note): void => {
-    this.setState(prevState => ({
-      notes: prevState.notes.concat(note),
+    this.setState(currentState => ({
+      notes: currentState.notes.concat(note),
+    }));
+  };
+
+  handleEditNote = (note: Note, previousNoteDate: string): void => {
+    console.log(previousNoteDate);
+    this.setState(currentState => ({
+      notes: currentState.notes
+        .concat(note)
+        .filter(n => String(n.dateCreated) !== previousNoteDate),
+    }));
+  };
+
+  handleDeleteNote = (noteDate: string): void => {
+    this.setState(currentState => ({
+      notes: currentState.notes.filter(n => String(n.dateCreated) !== noteDate),
     }));
   };
 

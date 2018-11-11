@@ -6,6 +6,7 @@ import AppContext, { AppContextShape } from "./AppContext";
 
 interface IProps {
   handleAddNote: AppContextShape["handleAddNote"];
+  handleEditNote: AppContextShape["handleEditNote"];
   navigation: NavigationScreenProp<{ title?: string; content?: string }>;
 }
 
@@ -13,6 +14,7 @@ interface IState {
   title: string;
   content: string;
   editingNote: boolean;
+  editingNoteDateString: string;
 }
 
 class CreateNote extends React.Component<IProps, IState> {
@@ -21,10 +23,15 @@ class CreateNote extends React.Component<IProps, IState> {
 
     const title = this.props.navigation.getParam("title", "");
     const content = this.props.navigation.getParam("content", "");
+    const editingNoteDateString = this.props.navigation.getParam(
+      "dateString",
+      "",
+    );
 
     this.state = {
       title,
       content,
+      editingNoteDateString,
       editingNote: !!title && !!content,
     };
   }
@@ -75,11 +82,18 @@ class CreateNote extends React.Component<IProps, IState> {
   };
 
   createNote = () => {
-    this.props.handleAddNote({
-      title: this.state.title,
-      content: this.state.content,
-      dateCreated: new Date(),
-    });
+    const actionHandler = this.state.editingNote
+      ? this.props.handleEditNote
+      : this.props.handleAddNote;
+
+    actionHandler(
+      {
+        title: this.state.title,
+        content: this.state.content,
+        dateCreated: new Date(),
+      },
+      this.state.editingNoteDateString,
+    );
     this.props.navigation.goBack();
   };
 }
@@ -95,7 +109,13 @@ export default (props: any) => {
   return (
     <AppContext.Consumer>
       {(value: AppContextShape) => {
-        return <CreateNote {...props} handleAddNote={value.handleAddNote} />;
+        return (
+          <CreateNote
+            {...props}
+            handleAddNote={value.handleAddNote}
+            handleEditNote={value.handleEditNote}
+          />
+        );
       }}
     </AppContext.Consumer>
   );
