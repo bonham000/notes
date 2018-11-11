@@ -49,7 +49,7 @@ export default class NotesApp extends React.Component<{}, IState> {
 
   render(): JSX.Element | null {
     const { notes, loading, username, isDialogVisible } = this.state;
-    if (!loading) {
+    if (loading) {
       return (
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
