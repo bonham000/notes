@@ -41,21 +41,7 @@ class Home extends React.Component<IProps, {}> {
             }}
             renderRow={({ data }: { data: Note }) => {
               return (
-                <RowContainer>
-                  <RowTop>
-                    <Text
-                      numberOfLines={1}
-                      adjustsFontSizeToFit
-                      style={{ fontWeight: "bold" }}
-                    >
-                      {data.title}
-                    </Text>
-                    <Text>{new Date(data.dateCreated).toDateString()}</Text>
-                  </RowTop>
-                  <View style={{ paddingTop: 8, paddingBottom: 8 }}>
-                    <Text>{data.content}</Text>
-                  </View>
-                </RowContainer>
+                <NoteItem data={data} navigation={this.props.navigation} />
               );
             }}
           />
@@ -78,6 +64,76 @@ class Home extends React.Component<IProps, {}> {
 
   getKittenIndex = () => {
     return Math.floor(Math.random() * 3);
+  };
+}
+
+interface NoteItemProps {
+  data: Note;
+  navigation: NavigationScreenProp<{}>;
+}
+
+// tslint:disable-next-line
+class NoteItem extends React.Component<
+  NoteItemProps,
+  { toggleOptions: boolean }
+> {
+  constructor(props: NoteItemProps) {
+    super(props);
+
+    this.state = {
+      toggleOptions: false,
+    };
+  }
+
+  render(): JSX.Element {
+    const { data } = this.props;
+    return this.state.toggleOptions ? (
+      <RowContainer style={{ flexDirection: "row", height: 65 }}>
+        <Option onPress={this.toggleNoteOptions}>
+          <Text>Cancel 🤭</Text>
+        </Option>
+        <Option onPress={this.handleEditNote}>
+          <Text>Edit 📑</Text>
+        </Option>
+        <Option onPress={this.handleDeleteNote}>
+          <Text>Delete 🔥</Text>
+        </Option>
+      </RowContainer>
+    ) : (
+      <RowContainer onPress={this.toggleNoteOptions}>
+        <RowTop>
+          <Text
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            style={{ fontWeight: "bold" }}
+          >
+            {data.title}
+          </Text>
+          <Text>{new Date(data.dateCreated).toDateString()}</Text>
+        </RowTop>
+        <View style={{ paddingTop: 8, paddingBottom: 8 }}>
+          <Text>{data.content}</Text>
+        </View>
+      </RowContainer>
+    );
+  }
+
+  toggleNoteOptions = () => {
+    this.setState({
+      toggleOptions: !this.state.toggleOptions,
+    });
+  };
+
+  handleEditNote = () => {
+    const { data } = this.props;
+    this.props.navigation.navigate(ROUTE_NAMES.CREATE_NOTE, {
+      title: data.title,
+      content: data.content,
+    });
+  };
+
+  handleDeleteNote = () => {
+    // delete...
   };
 }
 
@@ -111,7 +167,7 @@ const ButtonContainer = glamorous.view({
   paddingBottom: 30,
 });
 
-const RowContainer = glamorous.view({
+const RowContainer = glamorous.touchableOpacity({
   marginTop: 2,
   marginBottom: 2,
   padding: 6,
@@ -119,6 +175,12 @@ const RowContainer = glamorous.view({
   borderWidth: 1,
   borderColor: "rgb(230,230,230)",
   backgroundColor: "rgb(255,255,255)",
+});
+
+const Option = glamorous.touchableOpacity({
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
 });
 
 const RowTop = glamorous.view({

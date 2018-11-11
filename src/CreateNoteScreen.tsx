@@ -6,21 +6,26 @@ import AppContext, { AppContextShape } from "./AppContext";
 
 interface IProps {
   handleAddNote: AppContextShape["handleAddNote"];
-  navigation: NavigationScreenProp<{}>;
+  navigation: NavigationScreenProp<{ title?: string; content?: string }>;
 }
 
 interface IState {
   title: string;
   content: string;
+  editingNote: boolean;
 }
 
 class CreateNote extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
+    const title = this.props.navigation.getParam("title", "");
+    const content = this.props.navigation.getParam("content", "");
+
     this.state = {
-      title: "",
-      content: "",
+      title,
+      content,
+      editingNote: !!title && !!content,
     };
   }
 
@@ -55,7 +60,7 @@ class CreateNote extends React.Component<IProps, IState> {
           style={{ marginTop: 35 }}
           onPress={this.createNote}
         >
-          Add Note
+          {this.state.editingNote ? "Save Changes" : "Add Note"}
         </Button>
       </Container>
     );

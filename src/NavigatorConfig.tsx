@@ -39,9 +39,18 @@ const AppStack = (userName: string) => {
       },
       [ROUTE_NAMES.CREATE_NOTE]: {
         screen: CreateNote,
-        navigationOptions: {
-          title: "Create a Note 📝",
-          headerBackTitle: null,
+        navigationOptions: ({
+          navigation,
+        }: {
+          navigation: NavigationScreenProp<{}>;
+        }) => {
+          const title = navigation.getParam("title", "");
+          const content = navigation.getParam("content", "");
+          const editingNote = !!title && !!content;
+          return {
+            title: `${editingNote ? "Edit" : "Create a"} Note 📝`,
+            headerBackTitle: null,
+          };
         },
       },
     },
