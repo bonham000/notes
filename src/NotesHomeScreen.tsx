@@ -13,7 +13,19 @@ interface IProps {
   handleDeleteNote: AppContextShape["handleDeleteNote"];
 }
 
-class Home extends React.Component<IProps, {}> {
+interface IState {
+  kittenIndex: number;
+}
+
+class Home extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      kittenIndex: this.getKittenIndex(),
+    };
+  }
+
   render(): JSX.Element {
     return (
       <Container>
@@ -37,7 +49,7 @@ class Home extends React.Component<IProps, {}> {
               Create a Note
             </Button>
           </ButtonContainer>
-          <View style={{ flex: 1 }}>{KITTENS[this.getKittenIndex()]}</View>
+          <View style={{ flex: 1 }}>{KITTENS[this.state.kittenIndex]}</View>
         </ControlsContainer>
       </Container>
     );
