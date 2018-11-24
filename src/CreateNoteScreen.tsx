@@ -1,5 +1,6 @@
 import glamorous from "glamorous-native";
 import React from "react";
+import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import { Button, Snackbar, TextInput } from "react-native-paper";
 import { NavigationScreenProp } from "react-navigation";
 
@@ -41,50 +42,52 @@ class CreateNote extends React.Component<IProps, IState> {
 
   render(): JSX.Element {
     return (
-      <Container>
-        <Snackbar
-          visible={Boolean(this.state.snackMessage)}
-          onDismiss={() => this.setState({ snackMessage: "" })}
-          action={{
-            label: "Okay",
-            onPress: () => {
-              this.setState({ snackMessage: "" });
-            },
-          }}
-        >
-          {this.state.snackMessage}
-        </Snackbar>
-        <TextInput
-          style={{
-            width: "95%",
-          }}
-          mode="outlined"
-          label="Note Title"
-          value={this.state.title}
-          onChangeText={this.handleChangeTitle}
-        />
-        <TextInput
-          style={{
-            width: "95%",
-            marginTop: 12,
-            height: 300,
-            maxHeight: 450,
-            paddingTop: 18,
-          }}
-          mode="outlined"
-          multiline
-          label="Note Content"
-          value={this.state.content}
-          onChangeText={this.handleChangeContent}
-        />
-        <Button
-          mode="contained"
-          style={{ marginTop: 35 }}
-          onPress={this.createNote}
-        >
-          {this.state.editingNote ? "Save Changes" : "Add Note"}
-        </Button>
-      </Container>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Container>
+          <Snackbar
+            visible={Boolean(this.state.snackMessage)}
+            onDismiss={() => this.setState({ snackMessage: "" })}
+            action={{
+              label: "Okay",
+              onPress: () => {
+                this.setState({ snackMessage: "" });
+              },
+            }}
+          >
+            {this.state.snackMessage}
+          </Snackbar>
+          <TextInput
+            style={{
+              width: "95%",
+            }}
+            mode="outlined"
+            label="Note Title"
+            value={this.state.title}
+            onChangeText={this.handleChangeTitle}
+          />
+          <TextInput
+            style={{
+              width: "95%",
+              marginTop: 12,
+              height: 300,
+              maxHeight: 450,
+              paddingTop: 18,
+            }}
+            mode="outlined"
+            multiline
+            label="Note Content"
+            value={this.state.content}
+            onChangeText={this.handleChangeContent}
+          />
+          <Button
+            mode="contained"
+            style={{ marginTop: 35 }}
+            onPress={this.createNote}
+          >
+            {this.state.editingNote ? "Save Changes" : "Add Note"}
+          </Button>
+        </Container>
+      </TouchableWithoutFeedback>
     );
   }
 
