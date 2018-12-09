@@ -59,7 +59,6 @@ export default class NotesApp extends React.Component<{}, IState> {
       );
     }
 
-    const AppNavigator = createAppNavigator(username);
     const shouldRenderApp = Boolean(username) && !isDialogVisible;
     return (
       <AppContext.Provider
@@ -86,7 +85,7 @@ export default class NotesApp extends React.Component<{}, IState> {
               label="Proceed 🙏"
             />
           </Dialog.Container>
-          {shouldRenderApp && <AppNavigator />}
+          {shouldRenderApp && <AppPureComponent username={username} />}
         </View>
       </AppContext.Provider>
     );
@@ -154,4 +153,21 @@ export default class NotesApp extends React.Component<{}, IState> {
       clearTimeout(this.timeout);
     }
   };
+}
+
+/** ========================================================================
+ * App Component
+ * =========================================================================
+ */
+
+// tslint:disable-next-line
+class AppPureComponent extends React.Component<{ username: string }, {}> {
+  shouldComponentUpdate(nextProps: any): boolean {
+    return false;
+  }
+
+  render(): JSX.Element {
+    const AppNavigator = createAppNavigator(this.props.username);
+    return <AppNavigator />;
+  }
 }
