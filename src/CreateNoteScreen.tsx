@@ -120,12 +120,14 @@ class CreateNote extends React.Component<IProps, IState> {
           },
           this.state.editingNoteDateString,
         );
+        this.props.navigation.goBack();
       } else {
         this.props.handleAddNote({
           title: this.state.title,
           content: this.state.content,
           dateCreated: String(new Date()),
         });
+        this.props.navigation.goBack();
       }
     }
   };
